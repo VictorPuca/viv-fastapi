@@ -1,8 +1,63 @@
 # -*- encoding: utf-8 -*-
 
-from Pipe import Pipe
-from Soil import Soil
+import Pipe
+import Soil
+import json
 
+from math import pi
+
+def iter_calc_pipe(pipe_name):
+    with open('./db.json', 'r') as file:
+        original_data = json.load(file)
+    data = original_data.copy()
+    with open('./db2.json', 'r') as file:
+        data2 = json.load(file)
+        
+    # Busca o duto específico pelo nome
+    duct = next((duct for duct in data['ducts'] if duct['pipe'] == pipe_name), None)
+    
+    if not duct:
+        print(f"Duto com o nome '{pipe_name}' não encontrado.")
+        return
+
+    result = calc_pipe(
+        duct['d_s'],
+        duct['t_s'],
+        data2['t_conc'],
+        data2['t_coat'],
+        data2['nu'],
+        data2['alpha'],
+        data2['young'],
+        data2['rho_water'],
+        data2['s_lay'],
+        data2['pbar'],
+        data2['dt'],
+        data2['h'],
+        data2['l'],
+        data2['e'],
+        data2['kc'],
+        data2['fcn'],
+        data2['rho_s'],
+        data2['rho_conc'],
+        data2['rho_coat'],
+        data2['rho_cont'],
+        data2['k_v'],
+        data2['k_l'],
+        data2['k_vs'],
+        data2['boundary_condition']
+    )
+    
+    try:
+        with open('./result.json', 'r') as file:
+            data_to_save = json.load(file)
+    except FileNotFoundError:
+        data_to_save = {}
+    
+    data_to_save[duct['pipe']] = result
+    
+    with open('./result.json', 'w') as file:
+        json.dump(data_to_save, file, indent=4)
+        
 
 def calc_pipe(
     d_s,
@@ -30,7 +85,7 @@ def calc_pipe(
     k_vs,
     boundary_condition
 ):
-    pipe = Pipe(
+    pipe = Pipe.Pipe(
         d_s,
         t_s,
         t_conc,
@@ -53,7 +108,7 @@ def calc_pipe(
         rho_cont,
     )
 
-    soil = Soil(pipe.l, pipe.sc_fac, pipe.ei, k_v, k_l, k_vs, boundary_condition)
+    soil = Soil.Soil(pipe.l, pipe.sc_fac, pipe.ei, k_v, k_l, k_vs, boundary_condition)
 
     # 1 - RP-F105 Span
     # 2 - Pinned-pinned
@@ -141,3 +196,8 @@ def calc_pipe(
         "delta_over_d": pipe.delta / pipe.d,
         "s_eff_over_p_cr": pipe.s_eff / pipe.p_cr
     }
+
+if __name__ == '__main__':
+    # Especifique o nome do duto
+    pipe_name = "24 (pol) STD"
+    iter_calc_pipe(pipe_name)

@@ -1,11 +1,23 @@
 # -*- encoding: utf-8 -*-
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from calc_pipe import calc_pipe
 from soil_stiffness import soil_stiffness
+from typing import List, Dict, Any
+import json
+from urllib.parse import urlparse, urlunparse
+from typing import Optional
 
 app = FastAPI()
+
+# Carrega os dados do arquivo JSON
+with open("db.json", "r") as file:
+    ducts = json.load(file)["ducts"]
+
+@app.get("/ducts", response_model=List[Dict[str, Any]])
+def get_ducts():
+    return ducts
 
 @app.post("/api")
 async def main(request: Request):

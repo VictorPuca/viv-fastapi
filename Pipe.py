@@ -1,5 +1,18 @@
 # -*- encoding: utf-8 -*-
 
+from fastapi import FastAPI, HTTPException
+from urllib.parse import urlparse, urlunparse
+from typing import Optional
+
+app = FastAPI()
+
+@app.get("http://127.0.0.1:8000/ducts")
+async def process_link(url: Optional[str] = None):
+    print(url)
+    if not url:
+        raise HTTPException(status_code=400, detail="URL is required")
+    
+
 from math import pi
 
 """
@@ -173,3 +186,7 @@ class Pipe:
         d_s = self.d_s - self.t_s
         leff = leffl * self.l
         return c4 * self.sc_fac * self.d * self.young * d_s / (leff ** 2)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)
