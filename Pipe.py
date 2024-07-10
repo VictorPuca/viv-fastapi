@@ -1,20 +1,5 @@
 # -*- encoding: utf-8 -*-
 
-from fastapi import FastAPI, HTTPException
-from urllib.parse import urlparse, urlunparse
-from typing import Optional
-
-app = FastAPI()
-
-@app.get("http://127.0.0.1:8000/ducts")
-async def process_link(url: Optional[str] = None):
-    print(url)
-    if not url:
-        raise HTTPException(status_code=400, detail="URL is required")
-    
-
-from math import pi
-
 """
 # Pipe dimensions [m]
 d_s,  # Steel diameter

@@ -6,18 +6,16 @@ from calc_pipe import calc_pipe
 from soil_stiffness import soil_stiffness
 from typing import List, Dict, Any
 import json
-from urllib.parse import urlparse, urlunparse
-from typing import Optional
 
 app = FastAPI()
 
 # Carrega os dados do arquivo JSON
 with open("db.json", "r") as file:
-    ducts = json.load(file)["ducts"]
+    pipes = json.load(file)["pipes"]
 
-@app.get("/ducts", response_model=List[Dict[str, Any]])
-def get_ducts():
-    return ducts
+@app.get("/pipes", response_model=List[Dict[str, Any]])
+def get_pipes():
+    return pipes
 
 @app.post("/api")
 async def main(request: Request):

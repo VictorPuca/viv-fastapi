@@ -14,15 +14,15 @@ def iter_calc_pipe(pipe_name):
         data2 = json.load(file)
         
     # Busca o duto específico pelo nome
-    duct = next((duct for duct in data['ducts'] if duct['pipe'] == pipe_name), None)
+    pipe = next((pipe for pipe in data['pipes'] if pipe['pipe'] == pipe_name), None)
     
-    if not duct:
+    if not pipe:
         print(f"Duto com o nome '{pipe_name}' não encontrado.")
         return
 
     result = calc_pipe(
-        duct['d_s'],
-        duct['t_s'],
+        pipe['d_s'],
+        pipe['t_s'],
         data2['t_conc'],
         data2['t_coat'],
         data2['nu'],
@@ -53,7 +53,7 @@ def iter_calc_pipe(pipe_name):
     except FileNotFoundError:
         data_to_save = {}
     
-    data_to_save[duct['pipe']] = result
+    data_to_save[pipe['pipe']] = result
     
     with open('./result.json', 'w') as file:
         json.dump(data_to_save, file, indent=4)
