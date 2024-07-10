@@ -40,4 +40,4 @@ Esta é uma API desenvolvida com FastAPI para realizar cálculos definidos em ou
 Para iniciar o servidor da API, use o comando:
 
 ```bash
-uvicorn api_pipes.main:app --reload
+uvicorn api_pipes:app --reload
