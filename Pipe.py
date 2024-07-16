@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 
+pi = 3.14159265
+
 """
 # Pipe dimensions [m]
 d_s,  # Steel diameter

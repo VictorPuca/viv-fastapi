@@ -199,5 +199,5 @@ def calc_pipe(
 
 if __name__ == '__main__':
     # Especifique o nome do duto
-    pipe_name = "24 (pol) STD"
+    pipe_name = "NPS: 24 (pol) STD"
     iter_calc_pipe(pipe_name)
