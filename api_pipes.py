@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from calc_pipe import calc_pipe
 from soil_stiffness import soil_stiffness
 from typing import List, Dict, Any
@@ -9,11 +10,24 @@ import json
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Permite as origens listadas
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos
+    allow_headers=["*"],  # Permite todos os cabeçalhos
+)
+
 # Carrega os dados do arquivo JSON
 with open("db.json", "r") as file:
     pipes = json.load(file)["pipes"]
 
-@app.get("/pipes", response_model=List[Dict[str, Any]])
+# Retorna um array com os valores de diâmetro e espessura a partir do duto
+@app.get("/pipes", response_model = [])
 def get_pipes():
     return pipes
 
